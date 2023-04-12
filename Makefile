@@ -1,4 +1,5 @@
-C_OBJECTS=start.o main.o clock.o i2c.o uart.o newlib_helpers.o uart_dma.o sensor_qwiic.o
+#C_OBJECTS=start.o main.o clock.o uart.o newlib_helpers.o uart_dma.o i2c_dom.o i2c_sub.o
+C_OBJECTS=start.o main.o clock.o
 AS_OBJECTS=
 
 CC=arm-none-eabi-gcc
@@ -17,6 +18,7 @@ sensor_qwiic.bin : sensor_qwiic.hex
 
 install : sensor_qwiic.bin
 	dfu-util -d 0483:df11 -a 0 -s 0x08000000 -D ./sensor_qwiic.bin
+#TODO: we will be using openocd to program this.
 
 sensor_qwiic.hex : sensor_qwiic.elf
 	arm-none-eabi-objcopy sensor_qwiic.elf -O ihex sensor_qwiic.hex
