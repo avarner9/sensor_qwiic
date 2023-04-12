@@ -2,7 +2,7 @@
 
 
 //incomplete
-#define RCC_IOPENR    (*(volatile uint32_t *)0x40021024)
+#define RCC_IOPENR    (*(volatile uint32_t *)0x40021034)
 
 //incomplete
 #define GPIOB_MODER   (*(volatile uint32_t *)0x50000400)
