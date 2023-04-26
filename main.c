@@ -19,7 +19,7 @@ int main(void)
     */
 
     RCC_IOPENR |= 0x00000002;
-    GPIOB_MODER |= 0x00040000;
+    GPIOB_MODER &= 0xFFF7FFFF;
     GPIOB_ODR &= 0xFFFFFDFF;
 
     //initialize_i2c_sub();
