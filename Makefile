@@ -1,5 +1,5 @@
-#C_OBJECTS=start.o main.o clock.o uart.o newlib_helpers.o uart_dma.o i2c_dom.o i2c_sub.o
-C_OBJECTS=start.o main.o clock.o
+#C_OBJECTS=uart.o newlib_helpers.o uart_dma.o i2c_dom.o analog.o eeprom.o
+C_OBJECTS=start.o main.o clock.o i2c_sub.o i2c_sub_hw.o
 AS_OBJECTS=
 
 CC=arm-none-eabi-gcc
