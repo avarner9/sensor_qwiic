@@ -11,14 +11,23 @@ AS=arm-none-eabi-as
 ASFLAGS=-mthumb
 
 
+.PHONY : default install install_i2c
+
+default : sensor_qwiic.bin
+
+
+install : sensor_qwiic.bin
+	openocd -f openocd.cfg -c 'init' -c 'halt' -c 'flash write_image erase ./sensor_qwiic.bin 0x08000000' -c 'exit'
+#TODO: set option byte 0x1FFF7800 to 0xDEFFE1AA (default is 0xDEFFE1AA) . This enables the boot0 pin functionality.
+
+install_i2c : sensor_qwiic.hex
+	false
+#TODO: set option byte 0x1FFF7800 to 0xDEFFE1AA (default is 0xDEFFE1AA) . This enables the boot0 pin functionality.
+#TODO: set up i2c bootloader programmer here.
 
 
 sensor_qwiic.bin : sensor_qwiic.hex
 	arm-none-eabi-objcopy -I ihex sensor_qwiic.hex --only-section='*' -O binary sensor_qwiic.bin
-
-install : sensor_qwiic.bin
-	dfu-util -d 0483:df11 -a 0 -s 0x08000000 -D ./sensor_qwiic.bin
-#TODO: we will be using openocd to program this.
 
 sensor_qwiic.hex : sensor_qwiic.elf
 	arm-none-eabi-objcopy sensor_qwiic.elf -O ihex sensor_qwiic.hex
@@ -26,8 +35,6 @@ sensor_qwiic.hex : sensor_qwiic.elf
 sensor_qwiic.elf : $(C_OBJECTS) $(AS_OBJECTS)
 #	$(LD) $(LDFLAGS) $(C_OBJECTS) $(AS_OBJECTS) -o sensor_qwiic.elf
 	$(CC) $(CFLAGS) $(LDFLAGS) $(C_OBJECTS) $(AS_OBJECTS) -o sensor_qwiic.elf
-
-
 
 
 clean :
