@@ -3,8 +3,8 @@ C_OBJECTS=start.o main.o clock.o i2c_sub.o i2c_sub_hw.o
 AS_OBJECTS=
 
 CC=arm-none-eabi-gcc
-#CFLAGS=-mcpu=cortex-m4 -mthumb -Wall -Wextra --std=gnu99 -nostartfiles
-CFLAGS=-mcpu=cortex-m4 -mthumb -Wall -Wextra --std=gnu99
+#CFLAGS=-mcpu=cortex-m0 -mthumb -Wall -Wextra --std=gnu99 -nostartfiles
+CFLAGS=-mcpu=cortex-m0 -mthumb -Wall -Wextra --std=gnu99
 LD=arm-none-eabi-ld
 LDFLAGS=-T stm32g030.ld -nostartfiles
 AS=arm-none-eabi-as
