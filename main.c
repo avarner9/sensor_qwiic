@@ -27,12 +27,25 @@ int main(void)
     //initialize_i2c_sub();
     //initialize_i2c_dom();
 
+    uint16_t t_origin = get_time_ms();
     while (true)
     {
-        delay1s();
-        led_set_pwm_b(65535);
-        delay1s();
-        led_set_pwm_b(0);
+        uint16_t dt = get_time_ms() - t_origin;
+        if (dt > 2000)
+        {
+            t_origin += 2000;
+            dt -= 2000;
+        }
+        int32_t pwm = dt;
+        pwm *= 65535;
+        pwm /= 2000;
+        pwm = 65535 - pwm;
+        if (pwm < 0)
+            pwm = 0;
+        if (pwm > 65535)
+            pwm = 65535;
+        led_set_pwm_b(pwm);
+
         //process_dma_uart();
         //process_i2c_sub();
         //process_i2c_dom();
