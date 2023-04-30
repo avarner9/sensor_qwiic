@@ -4,9 +4,7 @@
 #include "clock.h"
 
 
-
 static void delay_1s_loop(void);
-
 
 
 static bool clock_initialized = false;
@@ -20,8 +18,8 @@ void delay1s(void)
     else
     {
         //TODO: use a proper timer
-        uint32_t end_time = get_time_ms() + 1000;
-        while (((int32_t)(get_time_ms() - end_time)) < 0)
+        uint16_t end_time = get_time_ms() + 1000;
+        while (((int16_t)(get_time_ms() - end_time)) < 0)
             ;
     }
 }
@@ -36,7 +34,7 @@ static void delay_1s_loop(void)
 
 void delay_ms(uint32_t t)
 {
-    uint32_t start_time = get_time_ms();
+    uint16_t start_time = get_time_ms();
     while (t > 0)
     {
         if ((get_time_ms() - start_time) > 1)
@@ -105,7 +103,7 @@ void initialize_clock(void)
     clock_initialized = true;
 }
 
-uint32_t get_time_ms(void)
+uint16_t get_time_ms(void)
 {
     return TIM14_CNT;
 }
