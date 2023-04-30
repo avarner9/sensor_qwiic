@@ -20,8 +20,8 @@ void delay1s(void)
     else
     {
         //TODO: use a proper timer
-        uint32_t end_time = get_time_us() + 1000000;
-        while (((int32_t)(get_time_us() - end_time)) < 0)
+        uint32_t end_time = get_time_ms() + 1000;
+        while (((int32_t)(get_time_ms() - end_time)) < 0)
             ;
     }
 }
@@ -36,12 +36,12 @@ static void delay_1s_loop(void)
 
 void delay_ms(uint32_t t)
 {
-    uint32_t start_time = get_time_us();
+    uint32_t start_time = get_time_ms();
     while (t > 0)
     {
-        if ((get_time_us() - start_time) > 1000)
+        if ((get_time_ms() - start_time) > 1)
         {
-            start_time += 1000;
+            start_time += 1;
             t--;
         }
     }
@@ -49,89 +49,77 @@ void delay_ms(uint32_t t)
 
 void initialize_clock(void)
 {
-#if 0
-// the following code is copied directly from the ddrcontroller project. it needs to be rewritten for the STM32G030 .
-
-    //Set flash to 4 wait states, to allow for faster CPU clock. Also enable all flash caching and prefetch.
-    FLASH_ACR = 0x00000704;
-    
-
-    //set APB2 prescaler to 16, relative to AHB (9MHz)
-    RCC_CFGR |= 0x0000E000;
-    //set APB1 prescaler to 16, relative to AHB (9MHz)
-    RCC_CFGR |= 0x00001C00;
-
-
-
-    //set AHB prescaler to 1, relative to system clock (144MHz)
-    RCC_CFGR = (RCC_CFGR & 0xFFFFFF0F);
-
-    //enable external crystal oscillator (12MHz)
-    RCC_CR |= 0x00010000;
-    //wait for the external crystal oscillator
-    while ((RCC_CR & 0x00020000) == 0)
+    //Set flash to 2 wait states, to allow for faster CPU clock. Also enable all flash caching and prefetch.
+    FLASH_ACR |= 0x00000302;
+    while ((FLASH_ACR & 0x00000302) != 0x00000302)
         ;
 
-    //switch system clock to the external crystal oscillator (12MHz)
-    RCC_CFGR = (RCC_CFGR & 0xFFFFFFFC) | 0x00000001;
-    //wait for the system clock to change
-    while ((RCC_CFGR & 0x0000000C) != 0x00000004)
+    /*
+    PLLRCLK (64MHz) is sysclock
+    max sys clock is 64MHz
+    hsi is fixed at 16mhz on startup
+
+    pllpclk is 64MHz
+    pllqclk is 64MHz
+
+    VCO output is 128MHz. Maximum is 344MHz.
+
+    ADC clock will be AHB/1 (64mhz). Thus skipping pllpclk. I'm not planning on using the ADC right now, though.
+
+    rtcclk is unused.
+
+    AHB is 64MHz
+    APB1 is 64MHz
+    APB2 is 64MHz
+    TIMPCLK is APB/1=64mhz
+    */
+
+    //Note: the processor starts in "voltage range 1", and must stay in that range for 64MHz to work correctly.
+
+    RCC_CFGR |= 0; //keep AHB and APB prescalers set to 1 (relative to sysclock) so 64MHz
+
+    uint32_t rcc_pllcfgr = RCC_PLLCFGR & 0x0FC0808C; //grab initial reserved bits, so as not to change them
+    rcc_pllcfgr |= 0x00000002; //set HSI (16MHz) as PLL input
+    rcc_pllcfgr |= 0x00000010; //set PLL input divider to 2 (8MHz)
+    rcc_pllcfgr |= 0x00001000; //set PLL multiplier to 16 (128MHz)
+    rcc_pllcfgr |= 0x00030000; //set PLL P output to divide by 2 (64MHz)
+    rcc_pllcfgr |= 0x30000000; //set PLL R output to divide by 2 (64MHz)
+    RCC_PLLCFGR = rcc_pllcfgr;
+
+    RCC_CR |= 0x01000000; //enable PLL
+    while ((RCC_CR & 0x02000000) == 0) //wait for PLL
         ;
 
-    //set PLL USB post-divider to 6 (48MHz)
-    RCC_PLLCFGR = (RCC_PLLCFGR & 0xF0FFFFFF) | 0x06000000;
-    //set PLL input clock to HSE (12MHz crystal oscillator)
-    RCC_PLLCFGR |= 0x00400000;
-    //set PLL main system clock post divider to 2 (144MHz)
-    RCC_PLLCFGR = (RCC_PLLCFGR & 0xFFFCFFFF);
-    //set PLL multiplier to 144 (288MHz)
-    RCC_PLLCFGR = (RCC_PLLCFGR & 0xFFFF803F) | (((uint32_t)144) << 6);
-    //set PLL pre-divider to 6 (2MHz)
-    RCC_PLLCFGR = (RCC_PLLCFGR & 0xFFFFFFC0) | ((uint32_t)6);
-
-    //wait a bit
-    RCC_CR;
-    RCC_CR;
-    RCC_CR;
-    RCC_CR;
-    RCC_CR;
-    RCC_CR;
-    RCC_CR;
-
-    //enable the PLL (72MHz/144MHz/36MHz)
-    RCC_CR |= 0x01000000;
-    //wait for the PLL
-    while ((RCC_CR & 0x02000000) == 0)
-        ;
-    //switch system clock to the PLL
-    RCC_CFGR = (RCC_CFGR & 0xFFFFFFFC) | 0x00000002;
-    //wait for the system clock to change
-    while ((RCC_CFGR & 0x0000000C) != 0x00000008)
+    RCC_CFGR |= 0x00000002; //use PLL as sys clock
+    while ((RCC_CFGR & 0x00000038) != 0x00000010) //wait for sys clock to switch to PLL
         ;
 
-/*
-    //shut off the HSI 16MHz internal oscillator
-    RCC_CR = (RCC_CR & 0xFFFFFFFE);
-    //wait for HSI to turn off
-    while ((RCC_CR & 0xFFFFFFFD) != 0)
-        ;
-*/
+    RCC_APBENR2 |= 0x00008000; //enable TIM14
+    RCC_APBENR2;
+    RCC_APBENR2;
 
-    //enable TIM2
-    RCC_APB1ENR |= 0x00000001;
-    //divide APB1*2 by 18 to get 1MHz
-    TIM2_PSC = 17;
-    //start TIM2
-    TIM2_CR1 |= 0x00000001;
-    TIM2_EGR = 0x00000001;
+    TIM14_PSC = 63999; //64MHz/64000=1kHz
+    TIM14_CR1 |= 0x00000001; //start TIM14
+    TIM14_EGR = 0x00000001; //apply prescaler now
 
-    clock_initialized = true;
-#endif
+//    clock_initialized = true;
+    //TODO: fix TIM14. It is not working yet. Then, uncomment this line, to use TIM14 for the 1ms timer.
 }
 
-uint32_t get_time_us(void)
+uint32_t get_time_ms(void)
 {
-    return 0; //TODO
-    //return TIM2_CNT;
+    return TIM14_CNT;
 }
+
+/* Timer usage:
+TIM1    PWM output for LED
+TIM16   PWM output for LED
+TIM17   PWM output for LED
+TIM4    not present
+TIM6    not present
+TIM7    not present
+TIM15   not present
+TIM3    unused
+TIM14   1ms timer
+*/
 

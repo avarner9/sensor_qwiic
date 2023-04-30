@@ -4,11 +4,15 @@
 void jump_to_bootloader(void);
 
 
+//incomplete
+
+#define FLASH_ACR     (*(volatile uint32_t *)0x40022000)
+
 //complete
-#define RCC_RCC       (*(volatile uint32_t *)0x40021000)
+#define RCC_CR        (*(volatile uint32_t *)0x40021000)
 #define RCC_ICSCR     (*(volatile uint32_t *)0x40021004)
 #define RCC_CFGR      (*(volatile uint32_t *)0x40021008)
-#define RCC_PLL_CFGR  (*(volatile uint32_t *)0x4002100C)
+#define RCC_PLLCFGR   (*(volatile uint32_t *)0x4002100C)
 //reserved            (*(volatile uint32_t *)0x40021010)
 //reserved            (*(volatile uint32_t *)0x40021014)
 #define RCC_CIER      (*(volatile uint32_t *)0x40021018)
@@ -56,3 +60,9 @@ void jump_to_bootloader(void);
 #define I2C1_PECR     (*(volatile uint32_t *)0x40005420)
 #define I2C1_RXDR     (*(volatile uint32_t *)0x40005424)
 #define I2C1_TXDR     (*(volatile uint32_t *)0x40005428)
+
+//incomplete
+#define TIM14_CR1     (*(volatile uint32_t *)0x40002000)
+#define TIM14_EGR     (*(volatile uint32_t *)0x40002014)
+#define TIM14_CNT     (*(volatile uint32_t *)0x40002024)
+#define TIM14_PSC     (*(volatile uint32_t *)0x40002028)
