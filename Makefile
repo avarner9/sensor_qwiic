@@ -1,10 +1,9 @@
 #C_OBJECTS=uart.o newlib_helpers.o uart_dma.o i2c_dom.o analog.o eeprom.o
-C_OBJECTS=start.o main.o clock.o i2c_sub.o i2c_sub_hw.o
+C_OBJECTS=start.o main.o clock.o i2c_sub.o i2c_sub_hw.o analog.o eeprom.o led.o stm32g030.o
 AS_OBJECTS=
 
 CC=arm-none-eabi-gcc
-#CFLAGS=-mcpu=cortex-m0 -mthumb -Wall -Wextra --std=gnu99 -nostartfiles
-CFLAGS=-mcpu=cortex-m0 -mthumb -Wall -Wextra --std=gnu99
+CFLAGS=-mcpu=cortex-m0 -mthumb -Wall -Wextra --std=gnu99 -Os
 LD=arm-none-eabi-ld
 LDFLAGS=-T stm32g030.ld -nostartfiles
 AS=arm-none-eabi-as

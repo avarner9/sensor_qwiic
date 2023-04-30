@@ -5,6 +5,8 @@
 #include "i2c_sub.h"
 #include "i2c_sub_hw.h"
 #include "eeprom.h"
+#include "analog.h"
+#include "led.h"
 
 
 static uint8_t reg_num = 0;
@@ -157,13 +159,13 @@ static void i2c_sub_write_register(uint8_t n, uint8_t data)
             led_set_digital(data);
             break;
         case 0x41: //LED R
-            led_set_pwm_r(data);
+            led_set_pwm_r(data * 256);
             break;
         case 0x42: //LED G
-            led_set_pwm_g(data);
+            led_set_pwm_g(data * 256);
             break;
         case 0x43: //LED B
-            led_set_pwm_b(data);
+            led_set_pwm_b(data * 256);
             break;
     }
 }
