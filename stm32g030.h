@@ -66,3 +66,14 @@ void jump_to_bootloader(void);
 #define TIM14_EGR     (*(volatile uint32_t *)0x40002014)
 #define TIM14_CNT     (*(volatile uint32_t *)0x40002024)
 #define TIM14_PSC     (*(volatile uint32_t *)0x40002028)
+
+//incomplete
+#define TIM17_CR1     (*(volatile uint32_t *)0x40014800)
+#define TIM17_EGR     (*(volatile uint32_t *)0x40014814)
+#define TIM17_CCMR1   (*(volatile uint32_t *)0x40014818)
+#define TIM17_CCER    (*(volatile uint32_t *)0x40014820)
+#define TIM17_CNT     (*(volatile uint32_t *)0x40014824)
+#define TIM17_PSC     (*(volatile uint32_t *)0x40014828)
+#define TIM17_ARR     (*(volatile uint32_t *)0x4001482C)
+#define TIM17_CCR1    (*(volatile uint32_t *)0x40014834)
+#define TIM17_BDTR    (*(volatile uint32_t *)0x40014844)
