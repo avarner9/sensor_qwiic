@@ -1,9 +1,9 @@
-#C_OBJECTS=uart.o newlib_helpers.o uart_dma.o i2c_dom.o analog.o eeprom.o
+#C_OBJECTS=uart.o newlib_helpers.o uart_dma.o i2c_dom.o
 C_OBJECTS=start.o main.o clock.o i2c_sub.o i2c_sub_hw.o analog.o eeprom.o led.o stm32g030.o
 AS_OBJECTS=
 
 CC=arm-none-eabi-gcc
-CFLAGS=-mcpu=cortex-m0 -mthumb -Wall -Wextra --std=gnu99 -Os
+CFLAGS=-mcpu=cortex-m0 -mthumb -Wall -Wextra --std=gnu99 -Os -g
 LD=arm-none-eabi-ld
 LDFLAGS=-T stm32g030.ld -nostartfiles
 AS=arm-none-eabi-as
@@ -17,6 +17,7 @@ default : sensor_qwiic.bin
 
 install : sensor_qwiic.bin
 	openocd -f openocd.cfg -c 'init' -c 'halt' -c 'flash write_image erase ./sensor_qwiic.bin 0x08000000' -c 'exit'
+#TODO: make openocd reset and run after programming
 #TODO: set option byte 0x1FFF7800 to 0xDEFFE1AA (default is 0xDEFFE1AA) . This enables the boot0 pin functionality.
 
 install_i2c : sensor_qwiic.hex
