@@ -102,8 +102,7 @@ void initialize_clock(void)
     TIM14_CR1 |= 0x00000001; //start TIM14
     TIM14_EGR = 0x00000001; //apply prescaler now
 
-//    clock_initialized = true;
-    //TODO: fix TIM14. It is not working yet. Then, uncomment this line, to use TIM14 for the 1ms timer.
+    clock_initialized = true;
 }
 
 uint32_t get_time_ms(void)
