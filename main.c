@@ -7,20 +7,22 @@
 //#include "uart_dma.h"
 //#include "i2c_dom.h"
 //#include "i2c_sub.h"
+#include "led.h"
+#include "analog.h"
 
 
 int main(void)
 {
+    delay1s();
+    delay1s();
+    delay1s();
+    delay1s();
+    delay1s();
+
+    initialize_led();
     initialize_clock();
     //initialize_dma_uart();
-
-    /*
-    pb9, aka tim17_ch1, aka pin 1 on the lqft32 package, is the blue led. set it low to turn it on.
-    */
-
-    RCC_IOPENR |= 0x00000002;
-    GPIOB_MODER &= 0xFFF7FFFF;
-    GPIOB_ODR &= 0xFFFFFDFF;
+    initialize_analog();
 
     //initialize_i2c_sub();
     //initialize_i2c_dom();
@@ -28,12 +30,13 @@ int main(void)
     while (true)
     {
         delay1s();
-        GPIOB_ODR &= 0xFFFFFDFF;
+        led_set_pwm_b(65535);
         delay1s();
-        GPIOB_ODR |= 0x00000200;
+        led_set_pwm_b(0);
         //process_dma_uart();
         //process_i2c_sub();
         //process_i2c_dom();
+        process_analog();
     }
 }
 
