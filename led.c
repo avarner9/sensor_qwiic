@@ -5,19 +5,18 @@
 
 void initialize_led(void)
 {
-    /*
-    pin assignments:
-    For the current prototype board:
-    p#  name    periph      LED
-    1   PB9     TIM17_CH1   blue
-    19  PA9     TIM1_CH2    red
-    30  PB6     TIM16_CH1N  green
+    /* Pin assignments:
+       For the current prototype board:
+        p#  name    periph      LED
+        1   PB9     TIM17_CH1   blue
+        19  PA9     TIM1_CH2    red
+        30  PB6     TIM16_CH1N  green
 
-    for the next revision of board (not ordered yet)
-    p#  name    periph      LED
-    1   PB9     TIM17_CH1   blue
-    13  PA6     TIM16_CH1   red
-    27  PB3     TIM1_CH2    green
+       For the next revision of board (not ordered yet)
+        p#  name    periph      LED
+        1   PB9     TIM17_CH1   blue
+        13  PA6     TIM16_CH1   red
+        27  PB3     TIM1_CH2    green
     */
 
     RCC_IOPENR |= 0x00000002; //enable GPIOB
