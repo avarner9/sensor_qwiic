@@ -36,6 +36,19 @@ void jump_to_bootloader(void);
 #define RCC_CSR       (*(volatile uint32_t *)0x40021060)
 
 //complete
+#define GPIOA_MODER   (*(volatile uint32_t *)0x50000000)
+#define GPIOA_OTYPER  (*(volatile uint32_t *)0x50000004)
+#define GPIOA_OSPEEDR (*(volatile uint32_t *)0x50000008)
+#define GPIOA_PUPDR   (*(volatile uint32_t *)0x5000000C)
+#define GPIOA_IDR     (*(volatile uint32_t *)0x50000010)
+#define GPIOA_ODR     (*(volatile uint32_t *)0x50000014)
+#define GPIOA_BSRR    (*(volatile uint32_t *)0x50000018)
+#define GPIOA_LCKR    (*(volatile uint32_t *)0x5000001C)
+#define GPIOA_AFRL    (*(volatile uint32_t *)0x50000020)
+#define GPIOA_AFRH    (*(volatile uint32_t *)0x50000024)
+#define GPIOA_BRR     (*(volatile uint32_t *)0x50000028)
+
+//complete
 #define GPIOB_MODER   (*(volatile uint32_t *)0x50000400)
 #define GPIOB_OTYPER  (*(volatile uint32_t *)0x50000404)
 #define GPIOB_OSPEEDR (*(volatile uint32_t *)0x50000408)
@@ -60,6 +73,19 @@ void jump_to_bootloader(void);
 #define I2C1_PECR     (*(volatile uint32_t *)0x40005420)
 #define I2C1_RXDR     (*(volatile uint32_t *)0x40005424)
 #define I2C1_TXDR     (*(volatile uint32_t *)0x40005428)
+
+//complete
+#define I2C2_CR1      (*(volatile uint32_t *)0x40005800)
+#define I2C2_CR2      (*(volatile uint32_t *)0x40005804)
+#define I2C2_OAR1     (*(volatile uint32_t *)0x40005808)
+#define I2C2_OAR2     (*(volatile uint32_t *)0x4000580C)
+#define I2C2_TIMINGR  (*(volatile uint32_t *)0x40005810)
+#define I2C2_TIMEOUTR (*(volatile uint32_t *)0x40005814)
+#define I2C2_ISR      (*(volatile uint32_t *)0x40005818)
+#define I2C2_ICR      (*(volatile uint32_t *)0x4000581C)
+#define I2C2_PECR     (*(volatile uint32_t *)0x40005820)
+#define I2C2_RXDR     (*(volatile uint32_t *)0x40005824)
+#define I2C2_TXDR     (*(volatile uint32_t *)0x40005828)
 
 //incomplete
 #define TIM14_CR1     (*(volatile uint32_t *)0x40002000)
