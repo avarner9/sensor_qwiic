@@ -2,6 +2,7 @@
 #include "stm32g030.h"
 
 #include "i2c_dom.h"
+#include "clock.h"
 
 
 static uint8_t state = 0;
@@ -42,13 +43,13 @@ void initialize_i2c_dom(void)
 
 
     //TODO: consider moving the following initialization code to a new module
-    nau7802_reset = 0x03;
+    uint8_t nau7802_reset = 0x03;
     i2c_dom_write(0x2A, 0, &nau7802_reset, 1);
     while (i2c_dom_is_busy())
         process_i2c_dom();
     delay_ms(2);
 
-    nau7802_digital_startup = 0x02;
+    uint8_t nau7802_digital_startup = 0x02;
     i2c_dom_write(0x2A, 0, &nau7802_digital_startup, 1);
     while (i2c_dom_is_busy())
         process_i2c_dom();
